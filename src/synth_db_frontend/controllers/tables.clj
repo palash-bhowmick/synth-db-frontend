@@ -24,9 +24,11 @@
                                   [(name ?ident) ?col-name]
                                   [(.substring ?ns 6) ?table-name]
                                   [(= ?table-name \"" table-name "\" )]
-                                  ]") db))
-
-             )))
+                                  ]") db)
+                              )
+             )
+    )
+  )
 
 (defn get-datalog [table-name]
   (let [datalog (into [] (d/q (str "[:find ?ident
@@ -48,16 +50,15 @@
   )
 
 (defn get-table-names []
-;  (into [] (d/q (str "[:find ?table-name
-;                       :where
-;                       [?e :db/ident ?ident]
-;                       [(namespace ?ident) ?ns]
-;                       [(.startsWith ?ns \"table.\")]
-;                       [(name ?ident) ?col-name]
-;                       [(.substring ?ns 6) ?table-name]
-;                      ]") db)
-;    )
-  ["customer" "party"]
+  (into [] (map #(first %1) (into [] (d/q (str "[:find ?table-name
+                       :where
+                       [?e :db/ident ?ident]
+                       [(namespace ?ident) ?ns]
+                       [(.startsWith ?ns \"table.\")]
+                       [(name ?ident) ?col-name]
+                       [(.substring ?ns 6) ?table-name]
+                      ]") db)
+                              )))
   )
 
 (defn table-details
