@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source Sans Pro:300,400,700">
+    <link href="/css/synth-db-frontend.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/img/favicon.png">
+
+    <title>View Table Data</title>
+</head>
+<body>
+<header>
+    <img src="/img/caribou-logo.png" width="158" height="139">
+
+    <h2></h2>
+</header>
+<div class="container">
+    <div class="grid-block">
+        <div class="col-6">
+            <h2>Available Tables</h2>
+            <ul>
+                {{#tables}}
+                <li><a href="{{uri}}/{{loop.item}}">{{loop.item}}</a></li>
+                {{/tables}}
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
