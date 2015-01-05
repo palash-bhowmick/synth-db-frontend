@@ -4,7 +4,7 @@
             [caribou.app.controller :as controller]
             [datomic.api :as d]))
 
-(def datomic-uri "datomic:free://192.168.33.161:4334/test5")
+(def datomic-uri "datomic:free://192.168.33.161:4334/test136")
 (def conn (d/connect datomic-uri))
 (def db (d/db conn))
 
@@ -16,29 +16,25 @@
   (symbol (str " " '? (name (first col-ident))))
   )
 
+(defn get-col-attr-vector [table-name]
+  (into [] (d/q (str "[:find ?col-name ?ident
+                                    :where [?e :db/ident ?ident]
+                                    [(namespace ?ident) ?ns]
+                                    [(.startsWith ?ns \"table.\")]
+                                    [(name ?ident) ?col-name]
+                                    [(.substring ?ns 6) ?table-name]
+                                    [(= ?table-name \"" table-name "\" )]
+                                    ]") db)
+    )
+  )
+
 (defn get-columns [table-name]
-  (into [] (map #(first %1) (into [] (d/q (str "[:find ?col-name
-                                  :where [?e :db/ident ?ident]
-                                  [(namespace ?ident) ?ns]
-                                  [(.startsWith ?ns \"table.\")]
-                                  [(name ?ident) ?col-name]
-                                  [(.substring ?ns 6) ?table-name]
-                                  [(= ?table-name \"" table-name "\" )]
-                                  ]") db)
-                              )
-             )
+  (into [] (map #(first %1) (get-col-attr-vector table-name))
     )
   )
 
 (defn get-datalog [table-name]
-  (let [datalog (into [] (d/q (str "[:find ?ident
-                                :where [?e :db/ident ?ident]
-                                [(namespace ?ident) ?ns]
-                                [(.startsWith ?ns \"table.\")]
-                                [(name ?ident) ?col-name]
-                                [(.substring ?ns 6) ?table-name]
-                                [(= ?table-name \"" table-name "\" )]
-                                ]") db))]
+  (let [datalog (into [] (map #(rest %1) (get-col-attr-vector table-name)))]
 
     [':find (symbol (apply str (map #(get-find %1) datalog)))
      ':where
