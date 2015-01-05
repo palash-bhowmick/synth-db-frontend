@@ -9,16 +9,26 @@
     <link href="/css/synth-db-frontend.css" type="text/css" rel="stylesheet">
     <link rel="shortcut icon" href="/img/favicon.png">
 
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#data-table').DataTable({
+                "scrollX": true
+            });
+        });
+    </script>
+
     <title>View Table Data</title>
 </head>
 <body>
-<header>
-    <img src="/img/caribou-logo.png" width="158" height="139">
+<header style=" margin: 0 0 10px;padding: 50px 0">
     <h2>{{table-name}}</h2>
 </header>
 <div class="container">
     <div class="grid-block">
-        <table class="data-table">
+        <table class="data-table" id="data-table">
             <thead>
             <tr>
                 {{#table-head}}
